@@ -1,0 +1,25 @@
+# CODEOWNERS 文件定义代码所有者（Code Owners）
+# 语法类似 .gitignore，支持通配符
+
+# 默认所有者（所有文件的后备审查者）
+*       @intelingzhi
+
+# 核心代码由特定人员审查
+/src/   @intelingzhi
+
+# 测试代码
+/tests/ @intelingzhi
+
+# CI/CD 配置（关键文件，需要经验丰富的人审查）
+/.github/workflows/ @intelingzhi
+
+# 文档
+/docs/  @intelingzhi
+*.md    @intelingzhi
+
+# 配置文件
+/pyproject.toml @intelingzhi
+/requirements*.txt @intelingzhi
+
+# 特定文件的所有者
+/LICENSE @intelingzhi
