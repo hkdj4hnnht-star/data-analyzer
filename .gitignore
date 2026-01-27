@@ -1,0 +1,56 @@
+# Python 编译文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv
+
+# 测试和覆盖率
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+
+# IDE 配置（个人化配置不应提交）
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 构建产物
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+
+# 数据文件（示例数据除外）
+data/
+!data/sample_data.csv
+
+# 环境变量文件（可能包含密钥）
+.env
+.env.local
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# mypy 类型检查
+.mypy_cache/
+.dmypy.json
+dmypy.json
