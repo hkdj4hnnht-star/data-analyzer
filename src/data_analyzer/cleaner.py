@@ -32,7 +32,9 @@ class DataCleaner:
         except FileNotFoundError:
             raise FileNotFoundError(f"File not found: {filepath}")
 
-    def clean_data(self, drop_na_cols: Optional[List[str]] = None) -> pd.DataFrame:  # noqa: E501
+    def clean_data(
+        self, drop_na_cols: Optional[List[str]] = None
+    ) -> pd.DataFrame:  # noqa: E501
         """
         :param drop_na_cols: List of column names to check for NaNs.
                             If None, drops rows where ANY column is NaN.
