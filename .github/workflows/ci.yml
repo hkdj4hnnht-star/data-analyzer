@@ -1,0 +1,56 @@
+name: CI
+
+# 触发条件：
+# 1. 向 main 或 develop 分支 push 时
+# 2. 对 main 或 develop 分支发起 PR 时
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build:
+    # 运行环境：使用最新版 Ubuntu
+    runs-on: ubuntu-latest
+    
+    # 策略矩阵：同时在多个 Python 版本上测试
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    # 1. 拉取代码
+    - uses: actions/checkout@v4
+
+    # 2. 设置 Python 环境
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    # 3. 安装依赖
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black pytest pandas
+        # 如果有 requirements.txt，也可以用：
+        # pip install -r requirements-dev.txt
+
+    # 4. 代码风格检查 (Lint)
+    - name: Lint with flake8
+      run: |
+        # 停止构建如果存在语法错误或未定义名称
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # 像对待警告一样对待所有错误
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    # 5. 代码格式检查 (Format Check)
+    - name: Check format with Black
+      run: |
+        black --check .
+
+    # 6. 运行单元测试
+    - name: Test with pytest
+      run: |
+        pytest tests/
