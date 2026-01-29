@@ -1,7 +1,11 @@
 # src/data_analyzer/cleaner.py
 
 import pandas as pd
-from typing import Optional
+import logging  # <--- 新增导入
+from typing import Optional, List  # <--- 新增 List 类型
+
+# 配置 logger（实际项目中通常在入口文件配置，这里简单演示）
+logger = logging.getLogger(__name__)
 
 
 class DataCleaner:
@@ -28,8 +32,11 @@ class DataCleaner:
         except FileNotFoundError:
             raise FileNotFoundError(f"File not found: {filepath}")
 
-    def clean_data(self) -> pd.DataFrame:
+    def clean_data(self, drop_na_cols: Optional[List[str]] = None) -> pd.DataFrame:
         """
+        :param drop_na_cols: List of column names to check for NaNs. 
+                            If None, drops rows where ANY column is NaN.
+        
         Perform standard cleaning operations:
         1. Normalize column names (lowercase, spaces to underscores)
         2. Remove duplicate rows
@@ -46,11 +53,18 @@ class DataCleaner:
         # 2. Remove duplicates
         initial_rows = len(self.df)
         self.df = self.df.drop_duplicates()
+        dedup_rows = len(self.df)
 
-        # 3. Drop missing values
-        self.df = self.df.dropna()
+        # 3. Drop missing values (更灵活的逻辑)
+        if drop_na_cols:
+            self.df = self.df.dropna(subset=drop_na_cols)
+        else:
+            self.df = self.df.dropna()
 
         final_rows = len(self.df)
-        print(f"Cleaned data: Removed {initial_rows - final_rows} rows.")
+        # 替换 print 为 logging
+        logger.info(f"Cleaned data: Removed {initial_rows - dedup_rows} duplicates, "
+                    f"{dedup_rows - final_rows} rows with missing values.")
+        
 
         return self.df
